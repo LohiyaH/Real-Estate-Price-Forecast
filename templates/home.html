@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>House Price Prediction</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .centerdiv{
+            height:20vh;
+            display:flex;
+            justify-content: center;
+            align-items:center;}
+        .a{
+            height:50px;
+            width:50px;
+            background-color:#f5f6fa;
+            border-radius:50px;
+            text-align:center;
+            margin:20px;
+            box-shadow:1px 4px 2px 2px #dcdde1;
+            line-height:60px;}
+        .i{
+            transition: all 0.3s linear;
+        }
+        .i:hover{
+            transform :scale(1.4);
+        }
+        .details{
+            margin:5px;
+            
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+        }
+        .form-group select, .form-group input[type="number"] {
+            width: 100%;
+            height: 40px;
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+        .alert {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        .footer {
+            background-color: #f9f9f9;
+            padding: 10px;
+            text-align: center;
+        }
+        .social-links {
+            margin-top: 10px;
+        }
+        .social-links a {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 align="center">House Price Prediction</h1>
+        <h5 align="center">House Price Prediction Using Machine Learning</h5>
+        
+        <div class="forms">
+            <form action="{{ url_for('predict') }}" method="post">
+                <div class="form-group">
+                    <label for="posted">Posted By</label>
+                    <select name="posted" id="posted" required>
+                        <option value="">Select Owner/Dealer/Builder</option>
+                        <option value="Owner">Owner</option>
+                        <option value="Dealer">Dealer</option>
+                        <option value="Builder">Builder</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="under_construction">Under Construction</label>
+                    <select name="under_construction" id="under_construction" required>
+                        <option value="">Select Yes/No</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="rera">RERA Approved</label>
+                    <select name="rera" id="rera" required>
+                        <option value="">Select Yes/No</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="rooms">Number of BHK</label>
+                    <input type="number" name="rooms" id="rooms" min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="foot">Square Feet Area</label>
+                    <input type="number" name="foot" id="foot" min="100" step="0.01" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="ready_to_move">Ready to Move</label>
+                    <select name="ready_to_move" id="ready_to_move" required>
+                        <option value="">Select Yes/No</option>
+                        <option value="1">Yes</option>
+                        <option value="0">No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <select name="location" id="location" required>
+                        <option value="">Select Location</option>
+                        <option value="Adyar,Chennai">Adyar, Chennai</option>
+                        <option value="Alwarpet,Chennai">Alwarpet, Chennai</option>
+                        <option value="Ambattur,Chennai">Ambattur, Chennai</option>
+                        <option value="Andheri,Mumbai">Andheri, Mumbai</option>
+                        <option value="Banashankari,Bangalore">Banashankari, Bangalore</option>
+                        <option value="Borivali,Mumbai">Borivali, Mumbai</option>
+                        <option value="Electronic City,Bangalore">Electronic City, Bangalore</option>
+                        <option value="HSR Layout,Bangalore">HSR Layout, Bangalore</option>
+                        <option value="Indiranagar,Bangalore">Indiranagar, Bangalore</option>
+                        <option value="JP Nagar,Bangalore">JP Nagar, Bangalore</option>
+                        <option value="Jayanagar,Bangalore">Jayanagar, Bangalore</option>
+                        <option value="Koramangala,Bangalore">Koramangala, Bangalore</option>
+                        <option value="Malad,Mumbai">Malad, Mumbai</option>
+                        <option value="Mylapore,Chennai">Mylapore, Chennai</option>
+                        <option value="Powai,Mumbai">Powai, Mumbai</option>
+                        <option value="T Nagar,Chennai">T Nagar, Chennai</option>
+                        <option value="Velachery,Chennai">Velachery, Chennai</option>
+                        <option value="Whitefield,Bangalore">Whitefield, Bangalore</option>
+                        <option value="Worli,Mumbai">Worli, Mumbai</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Predict Price">
+                </div>
+            </form>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <div class="footer">
+            <p>Made by Harsh</p>
+            <div class="social-links">
+                <a href="https://github.com/LohiyaH" class="fa fa-Github"></a>
+                <a href="https://www.linkedin.com/in/hlohiya/" class="fa fa-LinkedIn"></a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
