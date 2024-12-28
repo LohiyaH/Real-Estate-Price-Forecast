@@ -40,7 +40,7 @@ python app.py
 Visit `http://127.0.0.1:5000` in your web browser to access the application.
 
 ## Dataset
-The dataset used for training the model is sourced from [Kaggle](https://www.kaggle.com/datasets/rohanrao/house-prices-in-india). It includes various features such as:
+The dataset used for training the model is sourced from Kaggle . It includes various features such as:
 - Location
 - Size (in square feet)
 - Number of bedrooms
